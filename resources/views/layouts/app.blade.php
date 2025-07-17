@@ -11,15 +11,16 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <!-- Vite Styles & Scripts -->
+    <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- Allow pushing additional styles -->
+    <!-- Allow pushing styles from child views -->
     @stack('styles')
 
     <style>
         body {
             margin: 0;
+            padding: 0;
             font-family: 'Figtree', sans-serif;
         }
 
@@ -58,7 +59,7 @@
             font-size: 14px;
             outline: none;
             box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
-            transition: box-shadow 0.3s, border-color 0.3s;
+            transition: 0.3s;
         }
 
         input:focus,
@@ -76,7 +77,7 @@
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 0 10px rgba(14, 165, 233, 0.6);
-            transition: box-shadow 0.3s, transform 0.3s;
+            transition: 0.3s;
         }
 
         .submit-button:hover {
@@ -98,7 +99,7 @@
             box-shadow: 0 0 20px rgba(0, 123, 255, 0.3);
             border: 1px solid rgba(0, 123, 255, 0.2);
             max-width: 600px;
-            margin: 2rem auto;
+            margin: auto;
         }
 
         .back-link {
@@ -112,7 +113,6 @@
         }
     </style>
 </head>
-
 <body class="antialiased">
     <div class="glow-background">
 
@@ -128,19 +128,14 @@
             </header>
         @endif
 
-        {{-- Main Content --}}
+        {{-- Page Content --}}
         <main class="px-4 py-6 sm:px-6 lg:px-8">
-            @yield('content')
-
-            {{-- Optional slot for components --}}
-            @isset($slot)
-                {{ $slot }}
-            @endisset
+            @yield('content') {{-- For @section --}}
+            {{ $slot ?? '' }} {{-- For <x-app-layout> --}}
         </main>
 
-        {{-- Scripts from child views --}}
+        {{-- Allow pushing scripts from child views --}}
         @stack('scripts')
-
     </div>
 </body>
 </html>
