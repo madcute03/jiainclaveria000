@@ -1,21 +1,20 @@
-<nav x-data="{ open: false }">
+<nav x-data="{ open: false }" class="nav-wrapper">
     <style>
-        nav {
-            background: #111;
-            border-bottom: 2px solid transparent;
+        .nav-wrapper {
             position: relative;
+            background: #111;
+            border-bottom: 3px solid transparent;
             z-index: 10;
         }
 
-        nav::before {
+        .nav-wrapper::before {
             content: '';
             position: absolute;
             inset: 0;
+            z-index: -1;
             background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet, red);
             background-size: 400%;
-            z-index: -1;
             animation: rainbowGlow 10s linear infinite;
-            border-bottom: 2px solid #fff;
         }
 
         @keyframes rainbowGlow {
@@ -42,37 +41,39 @@
 
         .nav-logo svg {
             height: 40px;
-            fill: #fff;
         }
 
         .nav-link {
             color: white;
-            text-decoration: none;
             font-weight: 500;
+            text-decoration: none;
             position: relative;
-            padding: 0.3rem 0.5rem;
-            border-radius: 5px;
-            transition: color 0.3s ease;
+            padding: 0.4rem 0.6rem;
+            transition: color 0.3s;
         }
 
-        .nav-link:hover::before {
-            content: "";
+        .nav-link:hover {
+            color: #60a5fa;
+        }
+
+        .notification-badge {
             position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
-            animation: rainbowGlow 5s linear infinite;
+            top: -8px;
+            right: -10px;
+            background: #dc2626;
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 9999px;
         }
 
         .hamburger {
             display: none;
+            font-size: 2rem;
             background: none;
             border: none;
-            cursor: pointer;
             color: white;
-            font-size: 1.8rem;
+            cursor: pointer;
         }
 
         @media (max-width: 768px) {
@@ -85,9 +86,11 @@
             }
 
             .mobile-menu {
-                display: block;
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
                 background: #111;
-                padding: 1rem 2rem;
+                padding: 1.5rem;
                 animation: fadeIn 0.3s ease-in-out;
             }
         }
@@ -98,11 +101,8 @@
         }
     </style>
 
-    @php
-        $unreadCount = Auth::user()->unreadNotifications->count();
-    @endphp
+    @php $unreadCount = Auth::user()->unreadNotifications->count(); @endphp
 
-    <!-- Main Navigation -->
     <div class="nav-container">
         <div class="nav-left">
             <a href="{{ route('dashboard') }}" class="nav-logo">
@@ -113,18 +113,13 @@
 
         <div class="nav-right">
             <span>👤 {{ Auth::user()->name }}</span>
-
-            <a href="{{ route('notifications') }}" class="nav-link relative">
+            <a href="{{ route('notifications') }}" class="nav-link">
                 🔔 Notifications
                 @if ($unreadCount > 0)
-                    <span class="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-2 py-0.5 rounded-full">
-                        {{ $unreadCount }}
-                    </span>
+                    <span class="notification-badge">{{ $unreadCount }}</span>
                 @endif
             </a>
-
             <a href="{{ route('profile.edit') }}" class="nav-link">Profile</a>
-
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="nav-link" style="background:none;border:none;padding:0;cursor:pointer;">
@@ -136,27 +131,21 @@
         <button @click="open = !open" class="hamburger">☰</button>
     </div>
 
-    <!-- Mobile Menu -->
-    <div x-show="open" class="mobile-menu" x-transition>
-        <div class="flex flex-col space-y-3">
-            <span>👤 {{ Auth::user()->name }}</span>
-            <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
-            <a href="{{ route('notifications') }}" class="nav-link relative">
-                🔔 Notifications
-                @if ($unreadCount > 0)
-                    <span class="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-2 py-0.5 rounded-full">
-                        {{ $unreadCount }}
-                    </span>
-                @endif
-            </a>
-            <a href="{{ route('profile.edit') }}" class="nav-link">Profile</a>
-
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="nav-link" style="background:none;border:none;padding:0;cursor:pointer;">
-                    {{ __('Log Out') }}
-                </button>
-            </form>
-        </div>
+    <div x-show="open" x-transition class="mobile-menu">
+        <span>👤 {{ Auth::user()->name }}</span>
+        <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
+        <a href="{{ route('notifications') }}" class="nav-link">
+            🔔 Notifications
+            @if ($unreadCount > 0)
+                <span class="notification-badge">{{ $unreadCount }}</span>
+            @endif
+        </a>
+        <a href="{{ route('profile.edit') }}" class="nav-link">Profile</a>
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="nav-link" style="background:none;border:none;padding:0;cursor:pointer;">
+                {{ __('Log Out') }}
+            </button>
+        </form>
     </div>
 </nav>
