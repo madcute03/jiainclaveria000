@@ -14,7 +14,6 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- Allow pushing styles from child views -->
     @stack('styles')
 
     <style>
@@ -46,9 +45,7 @@
             box-shadow: 0 0 20px rgba(0, 123, 255, 0.2);
         }
 
-        input[type="text"],
-        input[type="date"],
-        textarea {
+        input[type="text"], input[type="date"], textarea {
             width: 100%;
             padding: 12px;
             margin-bottom: 20px;
@@ -62,8 +59,7 @@
             transition: 0.3s;
         }
 
-        input:focus,
-        textarea:focus {
+        input:focus, textarea:focus {
             box-shadow: 0 0 10px rgba(59, 130, 246, 0.7);
             border-color: #60a5fa;
         }
@@ -116,10 +112,10 @@
 <body class="antialiased">
     <div class="glow-background">
 
-        {{-- Navigation --}}
+        {{-- ✅ Navigation --}}
         @include('layouts.navigation')
 
-        {{-- Page Header --}}
+        {{-- ✅ Page Header --}}
         @hasSection('header')
             <header class="bg-glow shadow">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -128,13 +124,12 @@
             </header>
         @endif
 
-        {{-- Page Content --}}
+        {{-- ✅ Page Content --}}
         <main class="px-4 py-6 sm:px-6 lg:px-8">
-            @yield('content') {{-- For @section --}}
-            {{ $slot ?? '' }} {{-- For <x-app-layout> --}}
+            @yield('content')
+            {{ $slot ?? '' }}
         </main>
 
-        {{-- Allow pushing scripts from child views --}}
         @stack('scripts')
     </div>
 </body>
