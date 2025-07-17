@@ -72,11 +72,10 @@
             border: none;
             cursor: pointer;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
         }
 
         @media (max-width: 768px) {
-            .nav-left > .nav-link,
             .nav-right {
                 display: none;
             }
@@ -103,24 +102,18 @@
         $unreadCount = Auth::user()->unreadNotifications->count();
     @endphp
 
-    <!-- Top Navigation -->
+    <!-- Main Navigation -->
     <div class="nav-container">
-        <!-- Left Side -->
         <div class="nav-left">
             <a href="{{ route('dashboard') }}" class="nav-logo">
                 <x-application-logo />
             </a>
-
-            <a href="{{ route('dashboard') }}" class="nav-link">
-                {{ __('Dashboard') }}
-            </a>
+            <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
         </div>
 
-        <!-- Right Side -->
         <div class="nav-right">
-            <span class="nav-user-name">👤 {{ Auth::user()->name }}</span>
+            <span>👤 {{ Auth::user()->name }}</span>
 
-            <!-- Notifications -->
             <a href="{{ route('notifications') }}" class="nav-link relative">
                 🔔 Notifications
                 @if ($unreadCount > 0)
@@ -130,47 +123,40 @@
                 @endif
             </a>
 
-            <!-- Logout -->
+            <a href="{{ route('profile.edit') }}" class="nav-link">Profile</a>
+
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <a href="{{ route('logout') }}"
-                   class="nav-link"
-                   onclick="event.preventDefault(); this.closest('form').submit();">
+                <button type="submit" class="nav-link" style="background:none;border:none;padding:0;cursor:pointer;">
                     {{ __('Log Out') }}
-                </a>
+                </button>
             </form>
         </div>
 
-        <!-- Hamburger Icon -->
-        <button @click="open = !open" class="hamburger">
-            ☰
-        </button>
+        <button @click="open = !open" class="hamburger">☰</button>
     </div>
 
-    <!-- Mobile Navigation -->
-    <div x-show="open" class="mobile-menu">
-        <span class="nav-user-name">👤 {{ Auth::user()->name }}</span>
-
-        <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
-
-        <a href="{{ route('notifications') }}" class="nav-link relative">
-            🔔 Notifications
-            @if ($unreadCount > 0)
-                <span class="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-2 py-0.5 rounded-full">
-                    {{ $unreadCount }}
-                </span>
-            @endif
-        </a>
-
-        <a href="{{ route('profile.edit') }}" class="nav-link">Profile</a>
-
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <a href="{{ route('logout') }}"
-               class="nav-link"
-               onclick="event.preventDefault(); this.closest('form').submit();">
-                {{ __('Log Out') }}
+    <!-- Mobile Menu -->
+    <div x-show="open" class="mobile-menu" x-transition>
+        <div class="flex flex-col space-y-3">
+            <span>👤 {{ Auth::user()->name }}</span>
+            <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
+            <a href="{{ route('notifications') }}" class="nav-link relative">
+                🔔 Notifications
+                @if ($unreadCount > 0)
+                    <span class="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-2 py-0.5 rounded-full">
+                        {{ $unreadCount }}
+                    </span>
+                @endif
             </a>
-        </form>
+            <a href="{{ route('profile.edit') }}" class="nav-link">Profile</a>
+
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="nav-link" style="background:none;border:none;padding:0;cursor:pointer;">
+                    {{ __('Log Out') }}
+                </button>
+            </form>
+        </div>
     </div>
 </nav>
